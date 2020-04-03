@@ -6,7 +6,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-    return render_template('gocery/Index.html')
+    content = {'text': "Hello from Flask"}
+    return render_template('gocery/Index.html', content)
 
 
 if __name__ == '__main__':
