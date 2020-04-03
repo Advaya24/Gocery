@@ -38,10 +38,13 @@ def got_location():
     stores = []
     for i in range(10):
         stores.append("Store : " + str(i + 1))
+
+    recon = len(stores) # Length of the stores variable!
+
     locations = {'location': request.form['location']}
     locations['possible_location'] = gmaps.place(
         get_place_id(locations['location'], None))
-    return render_template('gocery/Listing.html', locations=locations, stores=stores)
+    return render_template('gocery/Listing.html', locations=locations, stores=stores, recon = recon)
 
 
 @app.route('/select', methods=['POST'])
