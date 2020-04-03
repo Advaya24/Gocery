@@ -55,6 +55,10 @@ def selected_store():
     content = stores[int(i)]
     return render_template('gocery/Store.html', content=content)
 
+@app.route('/time', methods=['POST'])
+def time_slots():
+
+
 
 if __name__ == '__main__':
     app.run()
