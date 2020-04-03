@@ -12,6 +12,7 @@ gmaps = googlemaps.Client(key='AIzaSyB2FzTtHLFQEjOYzOXze6pXopbFUZlaR5o')
 #Variable Declaration Center...
 stores = []
 toggle = 5
+timing = []
 
 def get_place_id(name: str, location: Optional[str]) -> str:
     """Get the place id for place of given name and location
@@ -54,7 +55,7 @@ def got_location():
 def selected_store():
     i = request.form["Button"]
     content = {'store' : stores[int(i)]}
-    timing = []
+
     for i in range(toggle):
         timing.append(i)
     content['timing'] = timing
@@ -65,7 +66,11 @@ def selected_store():
 #def time_slots():
 #    return render_template('grocery/Store.html', )
 
-
+@app.route('/email_generator', methods=['POST'])
+def email_generator():
+    i = request.form["Button"]
+    content = {'timing' : timing[int(i)]}
+    return render_template('gocery/Mail.html', content=content)
 
 
 
