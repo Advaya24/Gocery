@@ -47,7 +47,7 @@ def got_location():
     return render_template('gocery/Listing.html', locations=locations, stores=stores, recon = recon)
 
 
-@app.route('/select', methods=['POST'])
+@app.route('/content', methods=['POST'])
 def selected_store():
     content = {'lol' : "Hello"}
     return render_template('gocery/Store.html', content=content)
