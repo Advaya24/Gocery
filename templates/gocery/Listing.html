@@ -9,7 +9,7 @@
         </h1> <br/>
         {% for i in range(recon): %}
             {{ stores[i] }}
-            <button type="submit" name="{{ stores[i] }}">Select</button> <br/>
+            <button type="submit" name="Button", value = i>Select</button> <br/>
         {% endfor %}
     </form>
 {% endblock %}

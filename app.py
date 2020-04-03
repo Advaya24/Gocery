@@ -9,6 +9,8 @@ app = Flask(__name__)
 
 gmaps = googlemaps.Client(key='AIzaSyB2FzTtHLFQEjOYzOXze6pXopbFUZlaR5o')
 
+#Variable Declaration Center...
+stores = []
 
 def get_place_id(name: str, location: Optional[str]) -> str:
     """Get the place id for place of given name and location
@@ -35,7 +37,7 @@ def hello_world():
 
 @app.route('/stores', methods=['POST'])
 def got_location():
-    stores = []
+
     for i in range(10):
         stores.append("Store : " + str(i + 1))
 
@@ -49,7 +51,9 @@ def got_location():
 
 @app.route('/content', methods=['POST'])
 def selected_store():
-    content = {'lol' : "Hello"}
+    i = request.form["Button"]
+    print(i == 1);
+    content = 5
     return render_template('gocery/Store.html', content=content)
 
 
