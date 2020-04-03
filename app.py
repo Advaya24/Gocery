@@ -49,7 +49,7 @@ def got_location():
 
 @app.route('/select', methods=['POST'])
 def selected_store():
-    content = {}
+    content = {'lol' : "Hello"}
     return render_template('gocery/Store.html', content=content)
 
 
