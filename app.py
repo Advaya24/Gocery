@@ -37,7 +37,7 @@ def hello_world():
 def got_location():
     locations = {'location': request.form['location']}
     locations['possible_location'] = gmaps.place(
-        get_place_id('grocery', locations['location']))
+        get_place_id(locations['location'], None))
     return render_template('gocery/Listing.html', locations=locations)
 
 
