@@ -35,10 +35,13 @@ def hello_world():
 
 @app.route('/stores', methods=['POST'])
 def got_location():
+    stores = []
+    for i in range(10):
+        stores.append("Store : " + i + 1)
     locations = {'location': request.form['location']}
     locations['possible_location'] = gmaps.place(
         get_place_id(locations['location'], None))
-    return render_template('gocery/Listing.html', locations=locations)
+    return render_template('gocery/Listing.html', locations=locations, stores=stores)
 
 
 @app.route('/select', methods=['POST'])
