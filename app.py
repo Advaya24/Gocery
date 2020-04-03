@@ -52,8 +52,7 @@ def got_location():
 @app.route('/content', methods=['POST'])
 def selected_store():
     i = request.form["Button"]
-    print(i == 1);
-    content = 5
+    content = stores[int(i)]
     return render_template('gocery/Store.html', content=content)
 
 
