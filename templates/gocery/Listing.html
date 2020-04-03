@@ -6,5 +6,7 @@
     <h1>
         {{ locations['location'] }}
     </h1> <br/>
-    <h1> {{ locations['possible_location'] }} </h1> <br/>
+    {% for i in locations['possible_location'] %}
+        {{ locations['possible_location'][i] }} <br/>
+    {% endfor %}
 {% endblock %}
