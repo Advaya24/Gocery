@@ -3,7 +3,13 @@
 
 {% endblock %}
 {% block body %}
-    <form action="{{ url_for('selected_store', variable = store) }}" method="post">
-    <h3> {{ content }}</h3>
-
+    <form action="{{ url_for('selected_store') }}" method="post">
+    <h3> {{ content['store'] }}</h3> <br>
+    <br>
+    <H3>
+    {% for i in range(toggle): %}
+            {{content['timing'][i]}}
+            <button type="submit" name="Button", value = {{ i }}>Select Time</button> <br/>
+        {% endfor %}
+    </H3>
 {% endblock %}
