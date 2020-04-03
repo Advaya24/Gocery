@@ -7,7 +7,7 @@
         <h1>
             {{ locations['location'] }}
         </h1> <br/>
-        {% for i in range(len(stores)) %}
+        {% for i in range(10): %}
             {{ stores[i] }}
             <button type="submit" name="{{ stores[i] }}">Select</button> <br/>
         {% endfor %}

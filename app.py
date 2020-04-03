@@ -37,7 +37,7 @@ def hello_world():
 def got_location():
     stores = []
     for i in range(10):
-        stores.append("Store : " + i + 1)
+        stores.append("Store : " + str(i + 1))
     locations = {'location': request.form['location']}
     locations['possible_location'] = gmaps.place(
         get_place_id(locations['location'], None))
