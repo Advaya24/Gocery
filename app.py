@@ -15,7 +15,7 @@ def hello_world():
     return render_template('gocery/Index.html', content=content), 200
 
 
-@app.route('/', methods=['POST'])
+@app.route('/stores', methods=['POST'])
 def got_location():
     return request.form['location']
 
