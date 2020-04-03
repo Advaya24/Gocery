@@ -5,7 +5,7 @@ import googlemaps
 
 app = Flask(__name__)
 
-gmaps = googlemaps.Client(key='')
+gmaps = googlemaps.Client(key=***REMOVED***)
 
 
 @app.route('/', methods=['GET'])
