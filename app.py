@@ -61,11 +61,6 @@ def selected_store():
     content['timing'] = timing
     return render_template('gocery/Store.html', content=content, toggle = toggle)
 
-
-#@app.route('/time', methods=['POST'])
-#def time_slots():
-#    return render_template('grocery/Store.html', )
-
 @app.route('/email_generator', methods=['POST'])
 def email_generator():
     i = request.form["Button"]
