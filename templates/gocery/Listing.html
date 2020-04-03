@@ -3,10 +3,13 @@
 
 {% endblock %}
 {% block body %}
-    <h1>
-        {{ locations['location'] }}
-    </h1> <br/>
-    {% for i in locations['possible_location'] %}
-        {{ locations['possible_location'][i] }} <br/>
-    {% endfor %}
+    <form action="{{ url_for('selected_store') }}" method="post">
+        <h1>
+            {{ locations['location'] }}
+        </h1> <br/>
+        {% for i in locations['possible_location'] %}
+            {{ locations['possible_location'][i] }}
+            <button type="submit">Select</button> <br/>
+        {% endfor %}
+    </form>
 {% endblock %}
