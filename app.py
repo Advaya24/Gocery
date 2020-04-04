@@ -170,9 +170,15 @@ def store_register():
         store_data.update(json.load(store_file))
         store_name = request.form['store_name']
         store_address = request.form['store_address']
+        open_time = request.form['open_time']
+        close_time = request.form['close_time']
+        avg_time = request.form['avg_time']
         store_dict = {
             'store_name': store_name,
-            'store_address': store_address
+            'store_address': store_address,
+            'open_time' : open_time,
+            'close_time' : close_time,
+            'avg_time' : avg_time
         }
         store_id += get_place_id(store_address, None)
         store_data[store_id] = store_dict
