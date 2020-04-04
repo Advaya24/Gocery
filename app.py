@@ -159,6 +159,7 @@ def selected_store():
     global store_id_global
     selected_store_id = request.form['store_id']
     store_data = {}
+    timing.clear()
     with open('static/stores.json', 'r') as store_file:
         store_data.update(json.load(store_file))
 
@@ -351,6 +352,9 @@ def checked_in():
     time_slot = ''
     with open('static/booked.json', 'r') as booked_file:
         booking_data.update(json.load(booked_file))
+    store_data = {}
+    with open('static/stores.json', 'r') as store_file:
+        store_data.update(json.load(store_file))
     booking_lst = []
     dt = datetime.fromisoformat(
         booking_data[store_id][0]).date()
@@ -362,11 +366,12 @@ def checked_in():
         if tup[0] == int(customer_id):
             time_slot += tup[1]
             slot_found = True
+    slot_duration = store_data[store_id]['avg_time']
 
     return render_template('gocery/CheckedIn.html',
                            invalid_store_id=invalid_store_id,
                            slot_found=slot_found, customer_id=customer_id,
-                           time_slot=time_slot)
+                           time_slot=time_slot, slot_duration=slot_duration)
 
 
 if __name__ == '__main__':

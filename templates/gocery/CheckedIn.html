@@ -11,7 +11,8 @@
             There is no slot for this customer id.
         {% else %}
             Customer ID: {{ customer_id }} <br/>
-            Time Slot: {{ time_slot }}
+            Time Slot: {{ time_slot }} <br/>
+            Slot Ends in: {{ slot_duration }} minutes
         {% endif %}
         <br/>
         <button type="submit">Check another combination</button>
