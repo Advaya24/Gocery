@@ -197,7 +197,7 @@ def check_in():
 
 @app.route('/providers/checkin/done', methods=['POST'])
 def checked_in():
-    return "Checked in"
+    return "Your timer starts now!"
 
 if __name__ == '__main__':
     app.run()
