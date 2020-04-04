@@ -59,6 +59,7 @@ def hello_world():
 
 @app.route('/stores', methods=['POST'])
 def got_location():
+    stores.clear()
     for i in range(10):
         stores.append("Store : " + str(i + 1))
 
@@ -96,11 +97,11 @@ def mail_sent():
     # if is_valid == 1:
     to_send = False
     email_data = {}
-    with open('static/emails.json', 'rb') as email_file:
-        email_data = json.load(email_file)
+    with open('static/emails.json', 'r') as email_file:
+        email_data.update(json.load(email_file))
         if email_id in email_data:
             # Check last access time
-            diff = datetime.now() - datetime(datetime.fromisoformat(email_data[email_id]))
+            diff = datetime.now() - datetime.fromisoformat(email_data[email_id])
             num_hours = diff.total_seconds() / 3600
             if num_hours >= 72:
                 email_data[email_id] = datetime.now()
@@ -109,11 +110,15 @@ def mail_sent():
             email_data[email_id] = datetime.now()
             to_send = True
 
-    with open('static/emails.json', 'w') as email_file:
-        if to_send:
-            msg = Message('Hello', recipients=[email_id])
-            mail.send(msg)
-            json.dump(email_data, email_file, default=date_converter)
+    if to_send:
+        with open('static/emails.json', 'w') as email_file:
+            try:
+                msg = Message('Hello', recipients=[email_id])
+                mail.send(msg)
+                json.dump(email_data, email_file, default=date_converter)
+            except:
+                to_send = False
+
     # else:
     #     render_template('gocery/Mail.html', content=content, email_id = email_id)
     # email = email_id['email_id']
