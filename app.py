@@ -197,7 +197,6 @@ def check_in():
 @app.route('/providers/checkin/done', methods=['POST'])
 def checked_in():
     entered_id = int(request.form['ID'])
-
     return "Your timer starts now!"
 
 if __name__ == '__main__':
