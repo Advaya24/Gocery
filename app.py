@@ -193,7 +193,11 @@ def store_register():
 
 @app.route('/providers/checkin', methods=['POST'])
 def check_in():
-    return "Check-in"
+    return render_template('gocery/Checkin.html')
+
+@app.route('/providers/checkin/done', methods=['POST'])
+def checked_in():
+    return "Checked in"
 
 
 if __name__ == '__main__':
