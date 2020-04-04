@@ -248,6 +248,7 @@ def mail_sent():
                 id_file.write(f'{cust_id}')
         except:
             to_send = False
+
         selected_time = slot_time_global
         selected_store_id = store_id_global
         slot_data = {}
@@ -257,6 +258,7 @@ def mail_sent():
             slot_data[selected_store_id][1][selected_time] -= 1
             with open('static/slots.json', 'w') as slot_file:
                 json.dump(slot_data, slot_file)
+
         booked_data = {}
         with open('static/booked.json', 'r') as booked_file:
             booked_data.update(json.load(booked_file))
@@ -272,19 +274,11 @@ def mail_sent():
             booked_data[selected_store_id][1].append((cust_id, selected_time))
         with open('static/booked.json', 'w') as booked_file:
             json.dump(booked_data, booked_file)
+
     if to_send:
         with open('static/emails.json', 'w') as email_file:
             json.dump(email_data, email_file, default=date_converter)
 
-    # else:
-    #     render_template('gocery/Mail.html', content=content, email_id = email_id)
-    # email = email_id['email_id']
-    # try:
-    #     v = validate_email(email)  # validate and get info
-    #    # email = v["email"]  # replace with normalized form
-    # except EmailNotValidError as e:
-    #     # email is not valid, exception message is human-readable
-    #     return render_template('/gocery/MailConf.html', email_id=email_id)
     return render_template('gocery/MailConf.html', to_send=to_send,
                            email_id=email_id)
 
@@ -359,7 +353,7 @@ def checked_in():
         booking_data.update(json.load(booked_file))
     booking_lst = []
     dt = datetime.fromisoformat(
-            booking_data[store_id][0]).date()
+        booking_data[store_id][0]).date()
     if store_id not in booking_data:
         invalid_store_id = True
     elif dt == datetime.today().date():
