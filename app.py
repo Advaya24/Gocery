@@ -180,8 +180,7 @@ def selected_store():
     to_update = False
     if selected_store_id in slot_data:
         last_updated = datetime.fromisoformat(slot_data[selected_store_id][0])
-        diff = (datetime.now()-last_updated).total_seconds() / (3600*24)
-        if diff >= 1:
+        if last_updated.date() < datetime.today().date():
             to_update = True
         else:
             content['slots'] = slot_data[selected_store_id][1]
