@@ -60,20 +60,24 @@ def hello_world():
 @app.route('/stores', methods=['POST'])
 def got_location():
     stores.clear()
-    for i in range(10):
-        stores.append("Store : " + str(i + 1))
+    # for i in range(10):
+    #     stores.append("Store : " + str(i + 1))
 
     recon = len(stores)  # Length of the stores variable!
 
     locations = {'location': request.form['location']}
-    locations['possible_location'] = gmaps.place(
-        get_place_id(locations['location'], None))
+    locations['possible_location'] = get_place_id(locations['location'], None)
     with open('static/stores.json', 'r') as store_file:
         store_data = json.load(store_file)
         for store in store_data.keys():
-            dist_matrix = gmaps.distance_matrix(orgins='place_id:' + locations['possible_location'], destinations='place_id:' + store)
-            distance_str = dist_matrix['rows'][0]['elements'][0]['distance']['text']
-            distance = re.findall('\d+(\.(\d+))?', distance_str)
+            dist_matrix = gmaps.distance_matrix(
+                origins='place_id:' + locations['possible_location'],
+                destinations='place_id:' + store)
+            distance_str = dist_matrix['rows'][0]['elements'][0]['distance'][
+                'text']
+            distance = float(re.findall('\d+\.\d+', distance_str)[0])
+            if distance <= 1:
+                stores.append(store_data[store]['store_name'])
 
     return render_template('gocery/Listing.html', locations=locations,
                            stores=stores, recon=recon)
