@@ -101,13 +101,13 @@ def mail_sent():
         email_data.update(json.load(email_file))
         if email_id in email_data:
             # Check last access time
-            diff = datetime.now() - datetime.fromisoformat(email_data[email_id])
+            diff = datetime.now() - datetime.fromisoformat(email_data[email_id][0])
             num_hours = diff.total_seconds() / 3600
             if num_hours >= 72:
-                email_data[email_id] = datetime.now()
+                email_data[email_id] = [datetime.now()]
                 to_send = True
         else:
-            email_data[email_id] = datetime.now()
+            email_data[email_id] = [datetime.now()]
             to_send = True
 
     if to_send:
@@ -119,6 +119,7 @@ def mail_sent():
                 msg = Message('Hello', recipients=[email_id])
                 msg.body = f'Your uid is: {id}'
                 mail.send(msg)
+                email_data[email_id].append(id)
             with open('static/id.txt', 'w') as id_file:
                 id_file.write(f'{id}')
         except:
