@@ -7,7 +7,7 @@ from flask_mail import Mail, Message
 from validate_email import validate_email
 from email_validator import EmailNotValidError
 import googlemaps
-from datetime import datetime, timedelta
+from datetime import datetime
 import json
 
 app = Flask(__name__)
@@ -111,13 +111,22 @@ def mail_sent():
             to_send = True
 
     if to_send:
-        with open('static/emails.json', 'w') as email_file:
-            try:
+        try:
+            id = 0
+            with open('static/id.txt', 'r') as id_file:
+                id += int(id_file.read())
+                id += 1
                 msg = Message('Hello', recipients=[email_id])
+                msg.body = f'Your uid is: {id}'
                 mail.send(msg)
-                json.dump(email_data, email_file, default=date_converter)
-            except:
-                to_send = False
+            with open('static/id.txt', 'w') as id_file:
+                id_file.write(f'{id}')
+        except:
+            to_send = False
+    if to_send:
+        with open('static/emails.json', 'w') as email_file:
+            json.dump(email_data, email_file, default=date_converter)
+
 
     # else:
     #     render_template('gocery/Mail.html', content=content, email_id = email_id)
