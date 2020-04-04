@@ -4,8 +4,6 @@ from flask import Flask
 from flask import render_template
 from flask import request
 from flask_mail import Mail, Message
-from validate_email import validate_email
-from email_validator import EmailNotValidError
 import googlemaps
 from datetime import datetime
 import json
@@ -37,7 +35,8 @@ def date_converter(obj):
 def get_place_id(name: str, location: Optional[str]) -> str:
     """Get the place id for place of given name and location
 
-    Returns place id as string for candidate with highest probability, or empty string if no candidate found
+    Returns place id as string for candidate with highest probability, or empty
+    string if no candidate found
     """
     place_id = str
     result = ''
@@ -68,6 +67,12 @@ def got_location():
     locations = {'location': request.form['location']}
     locations['possible_location'] = gmaps.place(
         get_place_id(locations['location'], None))
+    with open('static/stores.json', 'r') as store_file:
+        store_data = json.load(store_file)
+        for store in store_data:
+            dist_matrix = gmaps.distance_matrix(orgins='place_id:' + locations['possible_location'], destinations='place_id:' + store)
+            distance_str = dist_matrix['rows'][0]['elements'][0]['distance']['text']
+
     return render_template('gocery/Listing.html', locations=locations,
                            stores=stores, recon=recon)
 
@@ -101,7 +106,8 @@ def mail_sent():
         email_data.update(json.load(email_file))
         if email_id in email_data:
             # Check last access time
-            diff = datetime.now() - datetime.fromisoformat(email_data[email_id][0])
+            diff = datetime.now() - datetime.fromisoformat(
+                email_data[email_id][0])
             num_hours = diff.total_seconds() / 3600
             if num_hours >= 72:
                 email_data[email_id] = [datetime.now()]
@@ -177,28 +183,28 @@ def store_register():
         store_dict = {
             'store_name': store_name,
             'store_address': store_address,
-            'open_time' : open_time,
-            'close_time' : close_time,
-            'avg_time' : avg_time
+            'open_time': open_time,
+            'close_time': close_time,
+            'avg_time': avg_time
         }
         store_id += get_place_id(store_address, None)
         store_data[store_id] = store_dict
     with open('static/stores.json', 'w') as store_file:
         json.dump(store_data, store_file)
-    req = request
-    s = 'Your store id is: ' + store_id + '\nOpening: ' + request.form[
-        'open_time'] + '\nClosing: ' + request.form[
-               'close_time'] + '\nAverage: ' + request.form['avg_time']
-    return s
+    return render_template('gocery/RegistrationSuccess.html', store_id=store_id)
 
 
 @app.route('/providers/checkin', methods=['POST'])
 def check_in():
-    return render_template('gocery/Checkin.html')
+    return render_template('gocery/CheckIn.html')
+
 
 @app.route('/providers/checkin/done', methods=['POST'])
 def checked_in():
+    store_id = request.form['store_id']
+
     return "Your timer starts now!"
+
 
 if __name__ == '__main__':
     app.run()
