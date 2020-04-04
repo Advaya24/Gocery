@@ -1,11 +1,11 @@
-from typing import Optional
+from typing import Optional, Dict
 
 from flask import Flask
 from flask import render_template
 from flask import request
 from flask_mail import Mail, Message
 import googlemaps
-from datetime import datetime
+from datetime import datetime, timedelta
 import json
 import re
 
@@ -34,6 +34,67 @@ def date_converter(obj):
         return obj.__str__()
 
 
+def datetime_range(start, end, delta):
+    current = start
+    while current < end:
+        yield current
+        current += delta
+
+
+def am_pm_to_24_hour(input_time):
+    array = input_time.split()
+    array[1] = array[1].strip()
+    if array[1] == "AM":
+        return array[0]
+    # PM Region...
+    recon1 = array[0].split(':')
+    hours = recon1[0]
+    minute = recon1[1]
+    hours = hours.strip()
+    minute = minute.strip()
+    check1 = int(hours)
+    check1 = (check1 + 12) % 24
+    hours = str(check1)
+    input_time = hours + ':' + minute
+    return input_time
+
+
+def to_am_pm(input_time):
+    array = input_time.split(':')
+    hours = array[0]
+    minute = array[1]
+    second = array[2]
+    hours = hours.strip()
+    minute = minute.strip()
+    second = second.strip()
+    check_h = int(hours)
+    if check_h == 0:
+        # Edge Handler
+        check_h = check_h + 12
+        hours = str(check_h)
+        return hours + ':' + minute + " AM"
+
+    if check_h > 12:
+        # PM Zone
+        check_h = check_h - 12
+        hours = str(check_h)
+        return hours + ':' + minute + " PM"
+
+    # AM Zone
+    return hours + ':' + minute + " AM"
+
+
+def generate_slots(open_time: str, close_time: str, avg_time: str,
+                   num_cashiers: str) -> Dict[str, int]:
+    open_dt = datetime.strptime(open_time, '%H:%M %p')
+    close_dt = datetime.strptime(am_pm_to_24_hour(close_time), '%H:%M')
+    slots_single = [to_am_pm(time) for time in datetime_range(open_dt, close_dt, timedelta(minutes=int(avg_time)))]
+
+    slots = {time: int(num_cashiers)*3 for time in slots_single}
+
+    return slots
+
+
 def get_place_id(name: str, location: Optional[str]) -> str:
     """Get the place id for place of given name and location
 
@@ -49,7 +110,6 @@ def get_place_id(name: str, location: Optional[str]) -> str:
     if len(result['candidates']) >= 1:
         place_id = result['candidates'][0]['place_id']
     return place_id
-
 
 @app.route('/', methods=['GET'])
 def hello_world():
@@ -90,6 +150,7 @@ def got_location():
 @app.route('/content', methods=['POST'])
 def selected_store():
     selected_store_id = request.form['store_id']
+
     content = {
         'store_id': selected_store_id,
         'store_name': stores[store_ids.index(selected_store_id)]
@@ -193,12 +254,14 @@ def store_register():
         open_time = request.form['open_time']
         close_time = request.form['close_time']
         avg_time = request.form['avg_time']
+        num_cashiers = request.form['num_cashiers']
         store_dict = {
             'store_name': store_name,
             'store_address': store_address,
             'open_time': open_time,
             'close_time': close_time,
-            'avg_time': avg_time
+            'avg_time': avg_time,
+            'num_cashiers': num_cashiers
         }
         store_id += get_place_id(store_address, None)
         store_data[store_id] = store_dict
