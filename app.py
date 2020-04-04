@@ -141,5 +141,18 @@ def mail_sent():
                            email_id=email_id)
 
 
+@app.route('/providers/', methods=['GET'])
+def store_welcome():
+    return render_template('gocery/StoreWelcome.html')
+
+@app.route('/providers/register', methods=['POST'])
+def store_registration():
+    pass
+
+@app.route('/providers/checkin', methods=['POST'])
+def check_in():
+    pass
+
+
 if __name__ == '__main__':
     app.run()
