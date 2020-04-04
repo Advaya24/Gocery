@@ -349,7 +349,7 @@ def check_in():
 @app.route('/providers/checkin/done', methods=['POST'])
 def checked_in():
     store_id = request.form['store_id']
-
+    customer_id = request.form['customer_id']
     return "Your timer starts now!"
 
 
