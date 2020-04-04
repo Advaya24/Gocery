@@ -29,6 +29,11 @@ toggle = 5
 timing = []
 
 
+def date_converter(obj):
+    if isinstance(obj, datetime):
+        return obj.__str__()
+
+
 def get_place_id(name: str, location: Optional[str]) -> str:
     """Get the place id for place of given name and location
 
@@ -95,8 +100,8 @@ def mail_sent():
         email_data = json.load(email_file)
         if email_id in email_data:
             # Check last access time
-            diff = datetime.now() - email_data[email_id]
-            num_hours = diff.total_seconds() * 3600
+            diff = datetime.now() - datetime(datetime.fromisoformat(email_data[email_id]))
+            num_hours = diff.total_seconds() / 3600
             if num_hours >= 72:
                 email_data[email_id] = datetime.now()
                 to_send = True
@@ -108,7 +113,7 @@ def mail_sent():
         if to_send:
             msg = Message('Hello', recipients=[email_id])
             mail.send(msg)
-            json.dump(email_data, email_file)
+            json.dump(email_data, email_file, default=date_converter)
     # else:
     #     render_template('gocery/Mail.html', content=content, email_id = email_id)
     # email = email_id['email_id']
