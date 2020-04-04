@@ -4,10 +4,10 @@
 {% endblock %}
 {% block body %}
     <form action="{{ url_for('email_generator') }}" method="post">
-    <h3> {{ content['store'] }}</h3> <br>
+    <h3> {{ content['store_name'] }}</h3> <br>
     <br>
     <H3>
-    {% for i in range(toggle): %}
+    {% for i in range(toggle) %}
         Times:
             {{content['timing'][i]}}
             <button type="submit" name="Button", value = {{ i }}>Select Time</button> <br/>
