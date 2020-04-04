@@ -16,23 +16,23 @@
     <input name="store_address"> <br/>
 
     Select the opening time of the store: <br/>
-    <select id="open_time">
-        {% for i in range(recon) %}
-            <option value="{{ i }} "> {{ i }}</option>
+    <select name="open_time">
+        {% for i in times %}
+            <option value="{{ i }}"> {{ i }}</option>
         {% endfor %}<br/>
     </select>
         <br/>
     Select the closing time of the store: <br/>
-    <select id="close_time">
-        {% for i in range(recon) %}
+    <select name="close_time">
+        {% for i in times %}
             <option value="{{ i }}"> {{ i }}</option>
         {% endfor %}
     </select>
         <br/>
 
-    Select the average time to be allotted to the customer: <br/>
-    <select id="avg_time">
-        {% for i in range(recon) %}
+    Select the average time (in minutes) to be allotted to the customer: <br/>
+    <select name="avg_time">
+        {% for i in average_times %}
             <option value="{{ i }}"> {{ i }}</option>
         {% endfor %}
     </select>
