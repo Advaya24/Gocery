@@ -190,7 +190,7 @@ def selected_store():
         to_update = True
     if to_update:
         slot_data[selected_store_id] = (
-        datetime.now().isoformat(), content['slots'])
+            datetime.now().isoformat(), content['slots'])
         with open('static/slots.json', 'w') as slot_file:
             json.dump(slot_data, slot_file)
 
@@ -262,11 +262,12 @@ def mail_sent():
             booked_data.update(json.load(booked_file))
         to_update_bookings = True
         if selected_store_id in booked_data:
-            if booked_data[selected_store_id][0].date() == datetime.today().date():
+            if datetime.fromisoformat(booked_data[selected_store_id][
+                                          0]).date() == datetime.today().date():
                 to_update_bookings = False
         if to_update_bookings:
             booked_data[selected_store_id] = (
-            datetime.today().isoformat(), [(cust_id, selected_time)])
+                datetime.today().isoformat(), [(cust_id, selected_time)])
         else:
             booked_data[selected_store_id][1].append((cust_id, selected_time))
         with open('static/booked.json', 'w') as booked_file:
@@ -348,12 +349,30 @@ def check_in():
 
 @app.route('/providers/checkin/done', methods=['POST'])
 def checked_in():
+    invalid_store_id = False
+    slot_found = False
     store_id = request.form['store_id']
     customer_id = request.form['customer_id']
     booking_data = {}
-    with open('static/booked.json', 'r'):
-        booking_data.update(json.load())
-    return "Your timer starts now!"
+    time_slot = ''
+    with open('static/booked.json', 'r') as booked_file:
+        booking_data.update(json.load(booked_file))
+    booking_lst = []
+    dt = datetime.fromisoformat(
+            booking_data[store_id][0]).date()
+    if store_id not in booking_data:
+        invalid_store_id = True
+    elif dt == datetime.today().date():
+        booking_lst += booking_data[store_id][1]
+    for tup in booking_lst:
+        if tup[0] == int(customer_id):
+            time_slot += tup[1]
+            slot_found = True
+
+    return render_template('gocery/CheckedIn.html',
+                           invalid_store_id=invalid_store_id,
+                           slot_found=slot_found, customer_id=customer_id,
+                           time_slot=time_slot)
 
 
 if __name__ == '__main__':
