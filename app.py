@@ -119,12 +119,11 @@ def mail_sent():
                 msg = Message('Hello', recipients=[email_id])
                 msg.body = f'Your uid is: {id}'
                 mail.send(msg)
-            with open('static/id.txt', 'a') as id_file:
-                id_file.write(f'{id} \n')
+            with open('static/id.txt', 'w') as id_file:
+                id_file.write(f'{id}')
         except:
             to_send = False
     if to_send:
-        email_data[email_id] = [datetime.now(), id]
         with open('static/emails.json', 'w') as email_file:
             json.dump(email_data, email_file, default=date_converter)
 
@@ -191,13 +190,13 @@ def store_register():
                'close_time'] + '\nAverage: ' + request.form['avg_time']
     return s
 
+
 @app.route('/providers/checkin', methods=['POST'])
 def check_in():
     return render_template('gocery/Checkin.html')
 
 @app.route('/providers/checkin/done', methods=['POST'])
 def checked_in():
-    entered_id = int(request.form['ID'])
     return "Your timer starts now!"
 
 if __name__ == '__main__':
