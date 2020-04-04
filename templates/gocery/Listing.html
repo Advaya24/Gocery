@@ -9,9 +9,9 @@
             {{ locations['location'] }}
         </h1> <br/>
         Select store number
-        <select>
-            {% for i in stores %}
-                <option value=" Store {{ i }}">{{ i }}</option>
+        <select name="store_id">
+            {% for i in range(num_stores) %}
+                <option value="{{ store_ids[i] }}">{{ stores[i] }}</option>
             {% endfor %}<br/>
         </select>
         <br/>

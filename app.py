@@ -24,6 +24,7 @@ gmaps = googlemaps.Client(key='AIzaSyB2FzTtHLFQEjOYzOXze6pXopbFUZlaR5o')
 
 # Variable Declaration Center...
 stores = []
+store_ids = []
 toggle = 5
 timing = []
 
@@ -60,6 +61,7 @@ def hello_world():
 @app.route('/stores', methods=['POST'])
 def got_location():
     stores.clear()
+    store_ids.clear()
 
     locations = {'location': request.form['location']}
     locations['possible_location'] = get_place_id(locations['location'], None)
@@ -70,21 +72,28 @@ def got_location():
                 origins='place_id:' + locations['possible_location'],
                 destinations='place_id:' + store)
             try:
-                distance_str = dist_matrix['rows'][0]['elements'][0]['distance']['text']
+                distance_str = \
+                    dist_matrix['rows'][0]['elements'][0]['distance']['text']
                 distance = float(re.findall('\d+\.\d+', distance_str)[0])
-                if distance <= 1:
+                if distance <= 2:
                     stores.append(store_data[store]['store_name'])
+                    store_ids.append(store)
             except:
                 pass
     stores_found = len(stores) > 0
+    num_stores = len(stores)
     return render_template('gocery/Listing.html', locations=locations,
-                           stores=stores, stores_found=stores_found)
+                           stores=stores[:10], stores_found=stores_found,
+                           store_ids=store_ids[:10], num_stores=num_stores)
 
 
 @app.route('/content', methods=['POST'])
 def selected_store():
-    i = request.form["Button"]
-    content = {'store': stores[int(i)]}
+    selected_store_id = request.form['store_id']
+    content = {
+        'store_id': selected_store_id,
+        'store_name': stores[store_ids.index(selected_store_id)]
+    }
 
     for i in range(toggle):
         timing.append(i)
