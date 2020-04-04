@@ -150,6 +150,25 @@ def store_registration():
     return "Registration"
 
 
+@app.route('/providers/register/done', methods=['POST'])
+def store_register():
+    store_data = {}
+    store_id = ''
+    with open('static/stores.json', 'r') as store_file:
+        store_data.update(json.load(store_file))
+        store_name = request.form['store_name']
+        store_address = request.form['store_address']
+        store_dict = {
+            'store_name': store_name,
+            'store_address': store_address
+        }
+        store_id += get_place_id(store_address, None)
+        store_data[store_id] = store_dict
+    with open('static/stores.json', 'w') as store_file:
+        json.dump(store_data, store_file)
+    return 'Your store id is: ' + store_id
+
+
 @app.route('/providers/checkin', methods=['POST'])
 def check_in():
     return "Check-in"
