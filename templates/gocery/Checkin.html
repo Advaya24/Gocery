@@ -6,14 +6,16 @@
 
 <h3>
 Enter customer ID
-form action="{{ url_for('checked_in') }}" method="post">
+<form action="{{ url_for('checked_in') }}" method="post">
 </h3>
     <br/>
     <h5>
-    Enter the ID customer recieved by mail to start their time of shopping
+    Enter the ID customer received by mail to start their time of shopping
     <input name="ID"> <br/>
     <button type="submit">Enter</button>
     </h5>
+
+    </form>
 
 
 {% endblock %}

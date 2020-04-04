@@ -199,6 +199,5 @@ def check_in():
 def checked_in():
     return "Checked in"
 
-
 if __name__ == '__main__':
     app.run()
