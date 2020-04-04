@@ -157,11 +157,13 @@ def selected_store():
     content = {
         'store_id': selected_store_id,
         'store_name': stores[store_ids.index(selected_store_id)],
-        'open_time': store_data[selected_store_id]['open_time'],
-        'close_time': store_data[selected_store_id]['close_time'],
-        'avg_time': store_data[selected_store_id]['avg_time'],
-        'num_cashiers': store_data[selected_store_id]['num_cashiers']
     }
+
+    open_time = store_data[selected_store_id]['open_time']
+    close_time = store_data[selected_store_id]['close_time']
+    avg_time = store_data[selected_store_id]['avg_time']
+    num_cashiers = store_data[selected_store_id]['num_cashiers']
+
 
     for i in range(toggle):
         timing.append(i)
