@@ -7,8 +7,6 @@
         <h1>
             {{ locations['location'] }}
         </h1> <br/>
-{#            {{ stores[i] }}#}
-{#            <button type="submit" name="Button" value= {{ i }}>Select</button> <br/>#}
             Select store number
         <select>
                 </option>
@@ -17,6 +15,8 @@
         {% endfor %}<br/>
             </select>
             <br/>
+    <button type="submit">Select</button>
+    <br/>
 
     </form>
 {% endblock %}
