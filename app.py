@@ -119,8 +119,8 @@ def mail_sent():
                 msg = Message('Hello', recipients=[email_id])
                 msg.body = f'Your uid is: {id}'
                 mail.send(msg)
-            with open('static/id.txt', 'w') as id_file:
-                id_file.write(f'{id}')
+            with open('static/id.txt', 'a') as id_file:
+                id_file.write(f'{id} \n')
         except:
             to_send = False
     if to_send:
