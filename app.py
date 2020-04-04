@@ -147,7 +147,7 @@ def store_welcome():
 
 @app.route('/providers/register', methods=['POST'])
 def store_registration():
-    return "Registration"
+    return render_template('gocery/Registration.html')
 
 
 @app.route('/providers/register/done', methods=['POST'])
