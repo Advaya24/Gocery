@@ -127,7 +127,6 @@ def mail_sent():
         with open('static/emails.json', 'w') as email_file:
             json.dump(email_data, email_file, default=date_converter)
 
-
     # else:
     #     render_template('gocery/Mail.html', content=content, email_id = email_id)
     # email = email_id['email_id']
@@ -141,17 +140,19 @@ def mail_sent():
                            email_id=email_id)
 
 
-@app.route('/providers/', methods=['GET'])
+@app.route('/providers', methods=['GET'])
 def store_welcome():
     return render_template('gocery/StoreWelcome.html')
 
+
 @app.route('/providers/register', methods=['POST'])
 def store_registration():
-    pass
+    return "Registration"
+
 
 @app.route('/providers/checkin', methods=['POST'])
 def check_in():
-    pass
+    return "Check-in"
 
 
 if __name__ == '__main__':
