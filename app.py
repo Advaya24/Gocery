@@ -4,6 +4,7 @@ from flask import Flask
 from flask import render_template
 from flask import request
 from flask_mail import Mail, Message
+from validate_email import validate_email
 import googlemaps
 
 app = Flask(__name__)
@@ -80,8 +81,12 @@ def email_generator():
 @app.route('/sentmail', methods=['POST'])
 def mail_sent():
     email_id = {'email_id' : request.form['email']}
-    msg = Message('Hello', recipients=[email_id['email_id']])
-    mail.send(msg)
+    #is_valid = validate_email(email_id['email_id'])
+    # if is_valid == 1:
+    #         msg = Message('Hello', recipients=[email_id['email_id']])
+    #         mail.send(msg)
+    # else:
+    #     render_template('gocery/Mail.html', content=content, email_id = email_id)
     return render_template('gocery/MailConf.html', email_id=email_id)
 
 
