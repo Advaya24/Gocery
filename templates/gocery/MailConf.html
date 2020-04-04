@@ -6,8 +6,6 @@
     <h3>
         {% if to_send %}
         Mail containing pass ID was sent to {{ email_id }}
-            <form action="{{ url_for('hello_world') }}" method="get"><br/>
-            <button type="submit">Done</button>
         {% else %}
         One of two problems:
         <ol>
