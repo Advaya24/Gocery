@@ -171,7 +171,6 @@ def selected_store():
     content['slots'] = generate_slots(open_time, close_time, avg_time,
                                       num_cashiers)
 
-
     slot_data = {}
     with open('static/slots.json', 'r') as slot_file:
         slot_data.update(json.load(slot_file))
@@ -182,6 +181,8 @@ def selected_store():
         diff = (datetime.now()-last_updated).total_seconds() / (3600*24)
         if diff >= 1:
             to_update = True
+        else:
+            content['slots'] = slot_data[selected_store_id][1]
     else:
         to_update = True
     if to_update:
