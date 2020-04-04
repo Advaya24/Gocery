@@ -1,1 +1,25 @@
-{"ChIJa6wLwsrjDDkRRq-F0ZEO90k": {"store_name": "ABC", "store_address": "B38 Kailash Colony, New Delhi, 110048", "open_time":  "10:00 am", "close_time":  "10:00 pm", "avg_time": "30", "num_cashiers": "3"}, "ChIJp79PvjTiDDkRoGDQxFoWHeo": {"store_name": "abc", "store_address": "b 38 kailash colony, new delhi, 110048", "open_time": "8:00 am", "close_time": "6:00 pm", "avg_time":  "15", "num_cashiers":  "1"}, "ChIJ7WbQvpEEDTkRpwM4TwbPXHQ": {"store_name": "Lmao", "store_address": "lol", "open_time": "1:00 am", "close_time": "1:00 am", "avg_time": "15"}, "ChIJ0ewi-YUDDTkRMmrdjXzel0Q": {"store_name": "Khandelwal", "store_address": "B-1", "open_time": "8:00 am", "close_time": "10:00 pm", "avg_time": "15"}}
+{
+  "ChIJa6wLwsrjDDkRRq-F0ZEO90k": {
+    "store_name": "ABC",
+    "store_address": "B38 Kailash Colony, New Delhi, 110048",
+    "open_time": "10:00 am",
+    "close_time": "10:00 pm",
+    "avg_time": "30",
+    "num_cashiers": "3"
+  },
+  "ChIJp79PvjTiDDkRoGDQxFoWHeo": {
+    "store_name": "abc",
+    "store_address": "b 38 kailash colony, new delhi, 110048",
+    "open_time": "8:00 am",
+    "close_time": "6:00 pm",
+    "avg_time": "15",
+    "num_cashiers": "1"
+  },
+  "ChIJ7WbQvpEEDTkRpwM4TwbPXHQ": {
+    "store_name": "Lmao",
+    "store_address": "lol",
+    "open_time": "1:00 am",
+    "close_time": "1:00 am",
+    "avg_time": "15"
+  }
+}

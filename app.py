@@ -27,6 +27,7 @@ stores = []
 store_ids = []
 toggle = 5
 timing = []
+store_id_global = ''
 
 
 def date_converter(obj):
@@ -153,6 +154,7 @@ def got_location():
 
 @app.route('/content', methods=['POST'])
 def selected_store():
+    global store_id_global
     selected_store_id = request.form['store_id']
     store_data = {}
     with open('static/stores.json', 'r') as store_file:
@@ -194,13 +196,22 @@ def selected_store():
         if content['slots'][time] > 0:
             timing.append(time)
     content['timing'] = timing
+    store_id_global += selected_store_id
     return render_template('gocery/Store.html', content=content, toggle=len(timing))
 
 
 @app.route('/email_generator', methods=['POST'])
 def email_generator():
-    i = request.form["Button"]
-    content = {'timing': timing[int(i)]}
+    selected_store_id = store_id_global
+    selected_time = request.form['selected_time']
+    slot_data = {}
+    with open('static/slots.json', 'r') as slot_file:
+        slot_data.update(json.load(slot_file))
+    if selected_store_id in slot_data:
+        slot_data[selected_store_id][1][selected_time] -= 1
+        with open('static/slots.json', 'w') as slot_file:
+            json.dump(slot_data, slot_file)
+    content = {'timing': selected_time}
     return render_template('gocery/Mail.html', content=content)
 
 
