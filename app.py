@@ -5,6 +5,7 @@ from flask import render_template
 from flask import request
 from flask_mail import Mail, Message
 from validate_email import validate_email
+from email_validator import EmailNotValidError
 import googlemaps
 
 app = Flask(__name__)
@@ -83,12 +84,18 @@ def mail_sent():
     email_id = {'email_id' : request.form['email']}
     #is_valid = validate_email(email_id['email_id'])
     # if is_valid == 1:
-    #         msg = Message('Hello', recipients=[email_id['email_id']])
-    #         mail.send(msg)
-    # else:
-    #     render_template('gocery/Mail.html', content=content, email_id = email_id)
+    msg = Message('Hello', recipients=[email_id['email_id']])
+    mail.send(msg)
+# else:
+#     render_template('gocery/Mail.html', content=content, email_id = email_id)
+# email = email_id['email_id']
+# try:
+#     v = validate_email(email)  # validate and get info
+#    # email = v["email"]  # replace with normalized form
+# except EmailNotValidError as e:
+#     # email is not valid, exception message is human-readable
+#     return render_template('/gocery/MailConf.html', email_id=email_id)
     return render_template('gocery/MailConf.html', email_id=email_id)
-
 
 
 
