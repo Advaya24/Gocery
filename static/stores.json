@@ -21,5 +21,21 @@
     "open_time": "1:00 am",
     "close_time": "1:00 am",
     "avg_time": "15"
+  },
+  "ChIJL9haB4c2K4gRcAEfOj0aeYw": {
+    "store_name": "Shoppers Drug Mart",
+    "store_address": "Shoppers Drug Mart Bloor Street West Toronto",
+    "open_time": "6:00 am",
+    "close_time": "10:30 pm",
+    "avg_time": "15",
+    "num_cashiers": "3"
+  },
+  "ChIJiU0i9rQ0K4gROH1l3uO-rLM": {
+    "store_name": "Shoppers Drug Mart",
+    "store_address": "Shoppers Drug Mart Wellesley Street",
+    "open_time": "9:00 am",
+    "close_time": "3:00 pm",
+    "avg_time": "15",
+    "num_cashiers": "4"
   }
 }
