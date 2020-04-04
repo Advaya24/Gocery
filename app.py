@@ -147,7 +147,19 @@ def store_welcome():
 
 @app.route('/providers/register', methods=['POST'])
 def store_registration():
-    return render_template('gocery/Registration.html')
+    times = []
+    hours = []
+    for i in range(1, 13):
+        hours.append(str(i))
+    minutes = [':00', ':30']
+
+    for section in [' am', ' pm']:
+        for hour in hours:
+            for minute in minutes:
+                times.append(hour + minute + section)
+    average_times = [15, 30, 45, 60]
+    return render_template('gocery/Registration.html', times=times,
+                           average_times=average_times)
 
 
 @app.route('/providers/register/done', methods=['POST'])
@@ -166,7 +178,11 @@ def store_register():
         store_data[store_id] = store_dict
     with open('static/stores.json', 'w') as store_file:
         json.dump(store_data, store_file)
-    return 'Your store id is: ' + store_id
+    req = request
+    s = 'Your store id is: ' + store_id + '\nOpening: ' + request.form[
+        'open_time'] + '\nClosing: ' + request.form[
+               'close_time'] + '\nAverage: ' + request.form['avg_time']
+    return s
 
 
 @app.route('/providers/checkin', methods=['POST'])
