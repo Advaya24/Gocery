@@ -3,7 +3,7 @@
 
 {% endblock %}
 {% block body %}
-     <form action="{{ url_for('email_generator') }}" method="post">
+     <form action="{{ url_for('mail_sent') }}" method="post">
     <h3>
     Time you have selected is {{ content['timing'] }}
     Please enter your email address so that we can send your unique ID number.

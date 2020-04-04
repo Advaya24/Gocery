@@ -3,9 +3,19 @@ from typing import Optional
 from flask import Flask
 from flask import render_template
 from flask import request
+from flask_mail import Mail, Message
 import googlemaps
 
 app = Flask(__name__)
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_USERNAME'] = '***REMOVED***'
+app.config['MAIL_PASSWORD'] = '***REMOVED***'
+app.config['MAIL_DEFAULT_SENDER'] = '***REMOVED***'
+
+mail = Mail(app)
 
 gmaps = googlemaps.Client(key='***REMOVED***')
 
@@ -66,6 +76,14 @@ def email_generator():
     i = request.form["Button"]
     content = {'timing' : timing[int(i)]}
     return render_template('gocery/Mail.html', content=content)
+
+@app.route('/sentmail', methods=['POST'])
+def mail_sent():
+    email_id = {'email_id' : request.form['email']}
+    msg = Message('Hello', recipients=[email_id['email_id']])
+    mail.send(msg)
+    return render_template('gocery/MailConf.html', email_id=email_id)
+
 
 
 
