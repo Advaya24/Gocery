@@ -6,8 +6,13 @@
     {% if stores_found %}
     <form action="{{ url_for('selected_store') }}" method="post">
         <h1>
-            {{ locations['location'] }}
+            Store selection
+{#            {{ locations['location'] }}#}
         </h1> <br/>
+    <h4>
+        Based on the entered zip code, these are the available stores near you that have registered on our app as well.<br/>
+        You can, using the drop down menu, select which store you want to go to <br/>
+    </h4>
         Select store number
         <select name="store_id">
             {% for i in range(num_stores) %}

@@ -4,7 +4,10 @@
 {% endblock %}
 {% block body %}
     <form action="{{ url_for('email_generator') }}" method="post">
-        <h3> {{ content['store_name'] }}</h3> <br>
+        <h3>
+           The store you selected was {{ content['store_name'] }} <br/>
+            You may select a time as to your convenience from the drop down menu below.
+        </h3> <br>
         <br>
         <select name="selected_time">
             {% for i in range(toggle) %}
