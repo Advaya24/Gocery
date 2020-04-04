@@ -124,6 +124,7 @@ def mail_sent():
         except:
             to_send = False
     if to_send:
+        email_data[email_id] = [datetime.now(), id]
         with open('static/emails.json', 'w') as email_file:
             json.dump(email_data, email_file, default=date_converter)
 
