@@ -150,10 +150,17 @@ def got_location():
 @app.route('/content', methods=['POST'])
 def selected_store():
     selected_store_id = request.form['store_id']
+    store_data = {}
+    with open('static/stores.json', 'r') as store_file:
+        store_data.update(json.load(store_file))
 
     content = {
         'store_id': selected_store_id,
-        'store_name': stores[store_ids.index(selected_store_id)]
+        'store_name': stores[store_ids.index(selected_store_id)],
+        'open_time': store_data[selected_store_id]['open_time'],
+        'close_time': store_data[selected_store_id]['close_time'],
+        'avg_time': store_data[selected_store_id]['avg_time'],
+        'num_cashiers': store_data[selected_store_id]['num_cashiers']
     }
 
     for i in range(toggle):
@@ -268,7 +275,6 @@ def store_register():
     with open('static/stores.json', 'w') as store_file:
         json.dump(store_data, store_file)
     return render_template('gocery/RegistrationSuccess.html', store_id=store_id)
-
 
 @app.route('/providers/checkin', methods=['POST'])
 def check_in():
