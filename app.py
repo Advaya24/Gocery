@@ -28,6 +28,7 @@ store_ids = []
 toggle = 5
 timing = []
 store_id_global = ''
+slot_time_global = ''
 
 
 def date_converter(obj):
@@ -89,23 +90,24 @@ def generate_slots(open_time: str, close_time: str, avg_time: str,
                    num_cashiers: str) -> Dict[str, int]:
     open_dt = datetime.strptime(open_time, '%H:%M %p')
     close_dt = datetime.strptime(am_pm_to_24_hour(close_time), '%H:%M')
-    slots_single = [to_am_pm(str(time.time())) for time in datetime_range(open_dt, close_dt,
-                                                              timedelta(
-                                                                  minutes=int(
-                                                                      avg_time)))]
+    slots_single = [to_am_pm(str(time.time())) for time in
+                    datetime_range(open_dt, close_dt,
+                                   timedelta(
+                                       minutes=int(
+                                           avg_time)))]
 
     slots = {time: int(num_cashiers) * 3 for time in slots_single}
 
     return slots
 
 
-def get_place_id(name: str, location: Optional[str]) -> str:
+def get_place_id(name: str, location: Optional[str]) -> Optional[str]:
     """Get the place id for place of given name and location
 
     Returns place id as string for candidate with highest probability, or empty
     string if no candidate found
     """
-    place_id = str
+    place_id = None
     result = ''
     if location is None:
         result = gmaps.find_place(name, 'textquery')
@@ -187,7 +189,8 @@ def selected_store():
     else:
         to_update = True
     if to_update:
-        slot_data[selected_store_id] = (datetime.now().isoformat(), content['slots'])
+        slot_data[selected_store_id] = (
+        datetime.now().isoformat(), content['slots'])
         with open('static/slots.json', 'w') as slot_file:
             json.dump(slot_data, slot_file)
 
@@ -196,21 +199,17 @@ def selected_store():
             timing.append(time)
     content['timing'] = timing
     store_id_global += selected_store_id
-    return render_template('gocery/Store.html', content=content, toggle=len(timing))
+    return render_template('gocery/Store.html', content=content,
+                           toggle=len(timing))
 
 
 @app.route('/email_generator', methods=['POST'])
 def email_generator():
-    selected_store_id = store_id_global
+    global slot_time_global
+    # selected_store_id = store_id_global
     selected_time = request.form['selected_time']
-    slot_data = {}
-    with open('static/slots.json', 'r') as slot_file:
-        slot_data.update(json.load(slot_file))
-    if selected_store_id in slot_data:
-        slot_data[selected_store_id][1][selected_time] -= 1
-        with open('static/slots.json', 'w') as slot_file:
-            json.dump(slot_data, slot_file)
     content = {'timing': selected_time}
+    slot_time_global += selected_time
     return render_template('gocery/Mail.html', content=content)
 
 
@@ -235,20 +234,43 @@ def mail_sent():
             email_data[email_id] = [datetime.now()]
             to_send = True
 
+    cust_id = 0
     if to_send:
         try:
-            id = 0
             with open('static/id.txt', 'r') as id_file:
-                id += int(id_file.read())
-                id += 1
+                cust_id += int(id_file.read())
+                cust_id += 1
                 msg = Message('Hello', recipients=[email_id])
-                msg.body = f'Your uid is: {id}'
+                msg.body = f'Your uid is: {cust_id}'
                 mail.send(msg)
-                email_data[email_id].append(id)
+                email_data[email_id].append(cust_id)
             with open('static/id.txt', 'w') as id_file:
-                id_file.write(f'{id}')
+                id_file.write(f'{cust_id}')
         except:
             to_send = False
+        selected_time = slot_time_global
+        selected_store_id = store_id_global
+        slot_data = {}
+        with open('static/slots.json', 'r') as slot_file:
+            slot_data.update(json.load(slot_file))
+        if selected_store_id in slot_data:
+            slot_data[selected_store_id][1][selected_time] -= 1
+            with open('static/slots.json', 'w') as slot_file:
+                json.dump(slot_data, slot_file)
+        booked_data = {}
+        with open('static/booked.json', 'r') as booked_file:
+            booked_data.update(json.load(booked_file))
+        to_update_bookings = True
+        if selected_store_id in booked_data:
+            if booked_data[selected_store_id][0].date() == datetime.today().date():
+                to_update_bookings = False
+        if to_update_bookings:
+            booked_data[selected_store_id] = (
+            datetime.today().isoformat(), [(cust_id, selected_time)])
+        else:
+            booked_data[selected_store_id][1].append((cust_id, selected_time))
+        with open('static/booked.json', 'w') as booked_file:
+            json.dump(booked_data, booked_file)
     if to_send:
         with open('static/emails.json', 'w') as email_file:
             json.dump(email_data, email_file, default=date_converter)
@@ -308,7 +330,11 @@ def store_register():
             'avg_time': avg_time,
             'num_cashiers': num_cashiers
         }
-        store_id += get_place_id(store_address, None)
+        place_id = get_place_id(store_address, None)
+        if place_id is not None:
+            store_id += place_id
+        else:
+            return 'Invalid address', 400
         store_data[store_id] = store_dict
     with open('static/stores.json', 'w') as store_file:
         json.dump(store_data, store_file)
