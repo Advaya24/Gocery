@@ -7,6 +7,7 @@ from flask_mail import Mail, Message
 import googlemaps
 from datetime import datetime
 import json
+import re
 
 app = Flask(__name__)
 
@@ -69,9 +70,10 @@ def got_location():
         get_place_id(locations['location'], None))
     with open('static/stores.json', 'r') as store_file:
         store_data = json.load(store_file)
-        for store in store_data:
+        for store in store_data.keys():
             dist_matrix = gmaps.distance_matrix(orgins='place_id:' + locations['possible_location'], destinations='place_id:' + store)
             distance_str = dist_matrix['rows'][0]['elements'][0]['distance']['text']
+            distance = re.findall('\d+(\.(\d+))?', distance_str)
 
     return render_template('gocery/Listing.html', locations=locations,
                            stores=stores, recon=recon)
