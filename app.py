@@ -350,6 +350,9 @@ def check_in():
 def checked_in():
     store_id = request.form['store_id']
     customer_id = request.form['customer_id']
+    booking_data = {}
+    with open('static/booked.json', 'r'):
+        booking_data.update(json.load())
     return "Your timer starts now!"
 
 
