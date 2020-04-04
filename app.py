@@ -11,16 +11,20 @@ import re
 
 app = Flask(__name__)
 
+data = {}
+with open('static/sensitive_data.json', 'r') as data_file:
+    data.update(json.load(data_file))
+
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_USERNAME'] = ***REMOVED***
-app.config['MAIL_PASSWORD'] = ***REMOVED***
-app.config['MAIL_DEFAULT_SENDER'] = ***REMOVED***
+app.config['MAIL_USERNAME'] = data['username']
+app.config['MAIL_PASSWORD'] = data['password']
+app.config['MAIL_DEFAULT_SENDER'] = data['username']
 
 mail = Mail(app)
 
-gmaps = googlemaps.Client(key=***REMOVED***)
+gmaps = googlemaps.Client(key=data['api_key'])
 
 # Variable Declaration Center...
 stores = []
@@ -80,6 +84,10 @@ def to_am_pm(input_time):
         # PM Zone
         check_h = check_h - 12
         hours = str(check_h)
+        return hours + ':' + minute + " pm"
+
+    if check_h == 12:
+        # 12 Zone
         return hours + ':' + minute + " pm"
 
     # AM Zone
