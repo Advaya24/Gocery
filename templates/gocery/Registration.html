@@ -1,0 +1,43 @@
+{% extends 'Base.html' %}
+{% block head %}
+
+{% endblock %}
+{% block body %}
+      <h3>
+          Welcome! Let's Register your Store.
+      </h3> <br/>
+    <form action="{{ url_for('') }}" method="post">
+    <h4>
+
+    Enter the Name of your store: <br/>
+    <input name="store_name"> <br/>
+
+    Enter the Address of your store: <br/>
+    <input name="store_address"> <br/>
+
+    Select the opening time of the store: <br/>
+    <select id="open_time">
+        {% for i in range(recon) %}
+            <option value=" i "> {{ i }}</option>
+        {% endfor %}<br/>
+    </select>
+        <br/>
+    Select the closing time of the store: <br/>
+    <select id="close_time">
+        {% for i in range(recon) %}
+            <option value=" i "> {{ i }}</option>
+        {% endfor %}
+    </select>
+        <br/>
+
+    Select the average time to be allotted to the customer: <br/>
+    <select id="avg_time">
+        {% for i in range(recon) %}
+            <option value=" i "> {{ i }}</option>
+        {% endfor %}
+    </select>
+        <br/>
+    </h4>
+    <button type="submit">Register</button>
+
+{% endblock %}
