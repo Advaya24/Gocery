@@ -4,7 +4,11 @@
 {% endblock %}
 {% block body %}
     <h3>
-        You have been registered successfully! Your store id is {{ store_id }}.
-        Please keep this id for future reference.
+        You have been registered successfully! <br/>
+        Your store id is {{ store_id }}. <br/>
+        Please keep this id for future reference. <br/>
     </h3>
+    <form action="{{ url_for('store_welcome') }}" method="get">
+    <button type="submit">Done</button>
+    </form>
 {% endblock %}
