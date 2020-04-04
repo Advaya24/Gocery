@@ -190,13 +190,14 @@ def store_register():
                'close_time'] + '\nAverage: ' + request.form['avg_time']
     return s
 
-
 @app.route('/providers/checkin', methods=['POST'])
 def check_in():
     return render_template('gocery/Checkin.html')
 
 @app.route('/providers/checkin/done', methods=['POST'])
 def checked_in():
+    entered_id = int(request.form['ID'])
+
     return "Your timer starts now!"
 
 if __name__ == '__main__':
