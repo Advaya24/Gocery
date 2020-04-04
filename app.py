@@ -72,25 +72,28 @@ def to_am_pm(input_time):
         # Edge Handler
         check_h = check_h + 12
         hours = str(check_h)
-        return hours + ':' + minute + " AM"
+        return hours + ':' + minute + " am"
 
     if check_h > 12:
         # PM Zone
         check_h = check_h - 12
         hours = str(check_h)
-        return hours + ':' + minute + " PM"
+        return hours + ':' + minute + " pm"
 
     # AM Zone
-    return hours + ':' + minute + " AM"
+    return hours + ':' + minute + " am"
 
 
 def generate_slots(open_time: str, close_time: str, avg_time: str,
                    num_cashiers: str) -> Dict[str, int]:
     open_dt = datetime.strptime(open_time, '%H:%M %p')
     close_dt = datetime.strptime(am_pm_to_24_hour(close_time), '%H:%M')
-    slots_single = [to_am_pm(time) for time in datetime_range(open_dt, close_dt, timedelta(minutes=int(avg_time)))]
+    slots_single = [to_am_pm(str(time.time())) for time in datetime_range(open_dt, close_dt,
+                                                              timedelta(
+                                                                  minutes=int(
+                                                                      avg_time)))]
 
-    slots = {time: int(num_cashiers)*3 for time in slots_single}
+    slots = {time: int(num_cashiers) * 3 for time in slots_single}
 
     return slots
 
@@ -110,6 +113,7 @@ def get_place_id(name: str, location: Optional[str]) -> str:
     if len(result['candidates']) >= 1:
         place_id = result['candidates'][0]['place_id']
     return place_id
+
 
 @app.route('/', methods=['GET'])
 def hello_world():
@@ -164,11 +168,32 @@ def selected_store():
     avg_time = store_data[selected_store_id]['avg_time']
     num_cashiers = store_data[selected_store_id]['num_cashiers']
 
+    content['slots'] = generate_slots(open_time, close_time, avg_time,
+                                      num_cashiers)
 
-    for i in range(toggle):
-        timing.append(i)
+
+    slot_data = {}
+    with open('static/slots.json', 'r') as slot_file:
+        slot_data.update(json.load(slot_file))
+
+    to_update = False
+    if selected_store_id in slot_data:
+        last_updated = datetime.fromisoformat(slot_data[selected_store_id][0])
+        diff = (datetime.now()-last_updated).total_seconds() / (3600*24)
+        if diff >= 1:
+            to_update = True
+    else:
+        to_update = True
+    if to_update:
+        slot_data[selected_store_id] = (datetime.now().isoformat(), content['slots'])
+        with open('static/slots.json', 'w') as slot_file:
+            json.dump(slot_data, slot_file)
+
+    for time in content['slots'].keys():
+        if content['slots'][time] > 0:
+            timing.append(time)
     content['timing'] = timing
-    return render_template('gocery/Store.html', content=content, toggle=toggle)
+    return render_template('gocery/Store.html', content=content, toggle=len(timing))
 
 
 @app.route('/email_generator', methods=['POST'])
@@ -277,6 +302,7 @@ def store_register():
     with open('static/stores.json', 'w') as store_file:
         json.dump(store_data, store_file)
     return render_template('gocery/RegistrationSuccess.html', store_id=store_id)
+
 
 @app.route('/providers/checkin', methods=['POST'])
 def check_in():
